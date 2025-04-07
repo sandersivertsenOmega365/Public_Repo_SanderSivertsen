@@ -1,10 +1,20 @@
-# Set hostname to TestVMScript
-Rename-Computer -NewName "TestVMScript" -Force
+# Create a new firewall rule named 'Sander_Test' for TCP and UDP on port 55231
 
-# Create a local user Sander Sivertsen
-$user = "Sander Sivertsen"
-$password = ConvertTo-SecureString "Password1!" -AsPlainText -Force
-New-LocalUser -Name $user -Password $password -FullName $user -PasswordNeverExpires
+$ruleName = "Sander_Test"
+$port = 55231
 
-# Add user to local Administrators group (optional)
-Add-
+# Add TCP rule
+New-NetFirewallRule -DisplayName "$ruleName - TCP" `
+                    -Direction Inbound `
+                    -Action Allow `
+                    -Protocol TCP `
+                    -LocalPort $port
+
+# Add UDP rule
+New-NetFirewallRule -DisplayName "$ruleName - UDP" `
+                    -Direction Inbound `
+                    -Action Allow `
+                    -Protocol UDP `
+                    -LocalPort $port
+
+Write-Host "Firewall rule '$ruleName' created for TCP and UDP on port $port." -ForegroundColor Green
