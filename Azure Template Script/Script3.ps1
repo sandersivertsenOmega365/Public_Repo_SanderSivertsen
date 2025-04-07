@@ -5,3 +5,8 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 
 # Install Notepad++
 choco install notepadplusplus -y
+
+# Install 7-Zip
+choco install 7zip -y
+# Install TeamViewer
+choco install teamviewer

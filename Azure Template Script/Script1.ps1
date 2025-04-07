@@ -17,4 +17,4 @@ New-NetFirewallRule -DisplayName "$ruleName - UDP" `
                     -Protocol UDP `
                     -LocalPort $port
 
-Write-Host "Firewall rule '$ruleName' created for TCP and UDP on port $port." -ForegroundColor Green
+
