@@ -41,7 +41,7 @@ if (-not (Get-Command choco.exe -ErrorAction SilentlyContinue)) {
 
 Start-Process choco -ArgumentList "install notepadplusplus -y" -Wait
 Start-Process choco -ArgumentList "install 7zip -y" -Wait
-Start-Process choco -ArgumentList "install teamviewer -y" -Wait
+Start-Process choco -ArgumentList "install googlechrome -y" -Wait
 
 # ---------------------
 # 4. Apply Cipher and TLS Hardening via Registry
