@@ -28,12 +28,11 @@ try {
     # Download and extract LGPO from Microsoft Security Compliance Toolkit
     $sctDownloadUrl = "https://download.microsoft.com/download/8/5/C/85C25433-A1B0-4FFA-9429-7E023E7DA8D8/LGPO.zip"
     $lgpoZipPath = "$toolsFolder\LGPO.zip"
-    $lgpoPath = "$toolsFolder\LGPO.exe"
 
-    if (-not (Test-Path $lgpoPath)) {
+    if (-not (Get-ChildItem -Path $toolsFolder -Recurse -Filter "LGPO.exe")) {
         Write-Log "Downloading Microsoft Security Compliance Toolkit LGPO"
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        
+
         $maxRetries = 3
         $retryCount = 0
         $success = $false
@@ -42,17 +41,12 @@ try {
             try {
                 Write-Log "Attempting to download LGPO.zip (Attempt $($retryCount + 1))"
                 Invoke-WebRequest -Uri $sctDownloadUrl -OutFile $lgpoZipPath
-                
+
                 Write-Log "Extracting LGPO.zip"
                 Expand-Archive -Path $lgpoZipPath -DestinationPath $toolsFolder -Force
                 Remove-Item $lgpoZipPath -Force
-                
-                if (Test-Path "$toolsFolder\LGPO.exe") {
-                    $success = $true
-                    Write-Log "LGPO.exe extracted successfully"
-                } else {
-                    throw "LGPO.exe not found in extracted contents"
-                }
+
+                $success = $true
             }
             catch {
                 $retryCount++
@@ -67,11 +61,18 @@ try {
         }
     }
 
+    # Dynamically locate LGPO.exe
+    $lgpoPath = Get-ChildItem -Path $toolsFolder -Recurse -Filter "LGPO.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+
+    if (-not $lgpoPath -or -not (Test-Path $lgpoPath)) {
+        throw "LGPO.exe not found under $toolsFolder"
+    }
+
     # The PolicyRules file will be downloaded from your public repo
     $policyRulesUrl = "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/.github/GPO/WindowsServer2022-CIS-L2.PolicyRules"
     $policyRulesPath = "$toolsFolder\WindowsServer2022-CIS-L2.PolicyRules"
     Write-Log "Downloading PolicyRules file"
-    
+
     $maxRetries = 3
     $retryCount = 0
     $success = $false
@@ -94,17 +95,13 @@ try {
         }
     }
 
-    # Verify files exist before proceeding
-    if (-not (Test-Path $lgpoPath)) {
-        throw "LGPO.exe not found at $lgpoPath"
-    }
     if (-not (Test-Path $policyRulesPath)) {
         throw "PolicyRules file not found at $policyRulesPath"
     }
 
     # Apply GPO policies
     Write-Log "Applying GPO policies"
-    Set-Location $toolsFolder
+    Set-Location (Split-Path $lgpoPath)
     $lgpoResult = Start-Process -FilePath $lgpoPath -ArgumentList "/p", $policyRulesPath -Wait -PassThru -NoNewWindow
     if ($lgpoResult.ExitCode -ne 0) {
         throw "LGPO.exe failed with exit code $($lgpoResult.ExitCode)"

@@ -5,7 +5,7 @@
       {
         "type": "Microsoft.VirtualMachineImages/imageTemplates",
         "apiVersion": "2022-07-01",
-        "name": "SQL2022WebTemplate",
+        "name": "SQL2022WebTemplate-v2",
         "location": "northeurope",
         "identity": {
           "type": "UserAssigned",
@@ -30,26 +30,26 @@
             {
               "type": "PowerShell",
               "name": "RunScript1",
-              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/Azure%20Template%20Script/Script1.ps1",
+              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script1.ps1",
               "runElevated": true
             },
             {
               "type": "PowerShell",
               "name": "RunScript2",
-              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/Azure%20Template%20Script/Script2.ps1",
+              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script2.ps1",
               "runElevated": true
             },
             {
               "type": "PowerShell",
               "name": "RunScript3",
-              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/Azure%20Template%20Script/Script3.ps1",
+              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script3.ps1",
               "runElevated": true
             }
           ],
           "distribute": [
             {
               "type": "ManagedImage",
-              "imageId": "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AIG/providers/Microsoft.Compute/images/SQL2022WebImage",
+              "imageId": "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AIG/providers/Microsoft.Compute/images/SQL2022WebImage-v2",
               "location": "northeurope",
               "runOutputName": "SQL2022WebOutput",
               "artifactTags": {

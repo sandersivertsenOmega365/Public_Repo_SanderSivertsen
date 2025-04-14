@@ -14,9 +14,3 @@ if (-not (Get-Command choco.exe -ErrorAction SilentlyContinue)) {
 
 Start-Process choco -ArgumentList "install notepadplusplus -y" -Wait
 Start-Process choco -ArgumentList "install 7zip -y" -Wait
-
-
-
-
-
-
