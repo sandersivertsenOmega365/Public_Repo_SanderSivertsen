@@ -36,7 +36,7 @@
             {
               "type": "PowerShell",
               "name": "RunScript2",
-              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script2.ps1",
+              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/Azure%20Template%20Script/Script2.ps1",
               "runElevated": true
             },
             {
