@@ -1,15 +1,13 @@
-$toolsFolder = "C:\Tools\GPO"
-New-Item -Path $toolsFolder -ItemType Directory -Force
+<#
+GPO for Windows Server 2022. Based on CIS L2 and Windows Security Baseline from Azure Security Benchmark v2.
+Read more on: https://kb.pimshosting.com/dokuwiki/doku.php?id=kb:infrastructure:server:windows:gpo:start#
+#>
 
-# Download LGPO.exe
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Omega365/cloud-platform/master/code/PowerShell/LocalGPO/WindowsServer2022-CIS-L2/GPO/LGPO.exe" -OutFile "$toolsFolder\LGPO.exe"
-
-# Download the Policy Rules file
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Omega365/cloud-platform/master/code/PowerShell/LocalGPO/WindowsServer2022-CIS-L2/GPO/WindowsServer2022-CIS-L2.PolicyRules" -OutFile "$toolsFolder\WindowsServer2022-CIS-L2.PolicyRules"
-
-# Apply the GPO policies
-Set-Location $toolsFolder
+Set-Location .\GPO
 .\LGPO.exe /p .\WindowsServer2022-CIS-L2.PolicyRules
 
-# Force group policy update
+Start-Sleep -Seconds 20
+Write-Output '- Applying local group policies...';
 gpupdate /force
+
+Write-Output '- Done. Reboot the machine.';
