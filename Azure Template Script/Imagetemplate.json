@@ -1,65 +1,81 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "resources": [
-      {
-        "type": "Microsoft.VirtualMachineImages/imageTemplates",
-        "apiVersion": "2022-07-01",
-        "name": "SQL2022WebTemplate-v2",
-        "location": "northeurope",
-        "identity": {
-          "type": "UserAssigned",
-          "userAssignedIdentities": {
-            "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AIG/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AIBuildIdentity": {}
-          }
-        },
-        "properties": {
-          "buildTimeoutInMinutes": 120,
-          "vmProfile": {
-            "vmSize": "Standard_D2s_v3",
-            "osDiskSizeGB": 127
-          },
-          "source": {
-            "type": "PlatformImage",
-            "publisher": "microsoftsqlserver",
-            "offer": "sql2022-ws2022",
-            "sku": "web-gen2",
-            "version": "latest"
-          },
-          "customize": [
-            {
-              "type": "PowerShell",
-              "name": "RunScript1",
-              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script1.ps1",
-              "runElevated": true
-            },
-            {
-              "type": "PowerShell",
-              "name": "RunScript2",
-              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/Azure%20Template%20Script/Script2.ps1",
-              "runElevated": true
-            },
-            {
-              "type": "PowerShell",
-              "name": "RunScript3",
-              "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script3.ps1",
-              "runElevated": true
-            }
-          ],
-          "distribute": [
-            {
-              "type": "ManagedImage",
-              "imageId": "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AIG/providers/Microsoft.Compute/images/SQL2022WebImage-v2",
-              "location": "northeurope",
-              "runOutputName": "SQL2022WebOutput",
-              "artifactTags": {
-                "source": "azVmImageBuilder",
-                "baseOS": "windows2022",
-                "sqlVersion": "2022-web"
-              }
-            }
-          ]
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "imageTemplates_DemoTemp_name": {
+          "defaultValue": "DemoTemp",
+          "type": "String"
+      },
+      "galleries_AzureImageComputeGallery01_externalid": {
+          "defaultValue": "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AzureImageBuilder01/providers/Microsoft.Compute/galleries/AzureImageComputeGallery01",
+          "type": "String"
       }
-    ]
+  },
+  "variables": {},
+  "resources": [
+      {
+          "type": "Microsoft.VirtualMachineImages/imageTemplates",
+          "apiVersion": "2024-02-01",
+          "name": "[parameters('imageTemplates_DemoTemp_name')]",
+          "location": "northeurope",
+          "identity": {
+              "type": "UserAssigned",
+              "userAssignedIdentities": {
+                  "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AzureImageBuilder01/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AzureImageBuilderIdentity": {}
+              }
+          },
+          "properties": {
+              "buildTimeoutInMinutes": 0,
+              "customize": [
+                  {
+                      "name": "powershellscriptscript0",
+                      "runAsSystem": true,
+                      "runElevated": true,
+                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script1.ps1",
+                      "sha256Checksum": "29554a7e29ab2a4b8f5c5cc655c0bfc9599dabf98eb0649a2f7546b61fdfd0b6",
+                      "type": "PowerShell"
+                  },
+                  {
+                      "name": "powershellscriptscript1",
+                      "runAsSystem": true,
+                      "runElevated": true,
+                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/Azure%20Template%20Script/Script2.ps1",
+                      "sha256Checksum": "cf03aed4e798087debd24d0c08e0b3cf050fa7359b7c0672823f0c365b65a99c",
+                      "type": "PowerShell"
+                  },
+                  {
+                      "name": "powershellscriptscript2",
+                      "runAsSystem": true,
+                      "runElevated": true,
+                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script3.ps1",
+                      "sha256Checksum": "6260a9effcf4c09ca7bfe43899007c234fba22f8e77e78c8f883f7519ea5c6f5",
+                      "type": "PowerShell"
+                  }
+              ],
+              "distribute": [
+                  {
+                      "artifactTags": {},
+                      "excludeFromLatest": false,
+                      "galleryImageId": "[concat(parameters('galleries_AzureImageComputeGallery01_externalid'), '/images/Standar_Launch_AIG/versions/1.0.0')]",
+                      "replicationRegions": [
+                          "northeurope"
+                      ],
+                      "runOutputName": "runOutputImageVersion",
+                      "type": "SharedImage"
+                  }
+              ],
+              "source": {
+                  "offer": "sql2022-ws2022",
+                  "publisher": "microsoftsqlserver",
+                  "sku": "web-gen2",
+                  "type": "PlatformImage",
+                  "version": "latest"
+              },
+              "vmProfile": {
+                  "osDiskSizeGB": 127,
+                  "vmSize": "Standard_D8as_v5"
+              }
+          }
+      }
+  ]
 }
