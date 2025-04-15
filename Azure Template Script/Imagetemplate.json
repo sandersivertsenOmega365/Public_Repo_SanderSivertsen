@@ -1,81 +1,105 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-      "imageTemplates_DemoTemp_name": {
-          "defaultValue": "DemoTemp",
-          "type": "String"
-      },
-      "galleries_AzureImageComputeGallery01_externalid": {
-          "defaultValue": "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AzureImageBuilder01/providers/Microsoft.Compute/galleries/AzureImageComputeGallery01",
-          "type": "String"
-      }
-  },
-  "variables": {},
-  "resources": [
-      {
-          "type": "Microsoft.VirtualMachineImages/imageTemplates",
-          "apiVersion": "2024-02-01",
-          "name": "[parameters('imageTemplates_DemoTemp_name')]",
-          "location": "northeurope",
-          "identity": {
-              "type": "UserAssigned",
-              "userAssignedIdentities": {
-                  "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AzureImageBuilder01/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AzureImageBuilderIdentity": {}
-              }
-          },
-          "properties": {
-              "buildTimeoutInMinutes": 0,
-              "customize": [
-                  {
-                      "name": "powershellscriptscript0",
-                      "runAsSystem": true,
-                      "runElevated": true,
-                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script1.ps1",
-                      "sha256Checksum": "29554a7e29ab2a4b8f5c5cc655c0bfc9599dabf98eb0649a2f7546b61fdfd0b6",
-                      "type": "PowerShell"
-                  },
-                  {
-                      "name": "powershellscriptscript1",
-                      "runAsSystem": true,
-                      "runElevated": true,
-                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script2.ps1",
-                      "sha256Checksum": "8A6A5B62559288CFB50C3FF317701BE1A7936515CB151BACF5A4AC8393C8DB9A",
-                      "type": "PowerShell"
-                  },
-                  {
-                      "name": "powershellscriptscript2",
-                      "runAsSystem": true,
-                      "runElevated": true,
-                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script3.ps1",
-                      "sha256Checksum": "6260a9effcf4c09ca7bfe43899007c234fba22f8e77e78c8f883f7519ea5c6f5",
-                      "type": "PowerShell"
-                  }
-              ],
-              "distribute": [
-                  {
-                      "artifactTags": {},
-                      "excludeFromLatest": false,
-                      "galleryImageId": "[concat(parameters('galleries_AzureImageComputeGallery01_externalid'), '/images/Standar_Launch_AIG/versions/1.0.0')]",
-                      "replicationRegions": [
-                          "northeurope"
-                      ],
-                      "runOutputName": "runOutputImageVersion",
-                      "type": "SharedImage"
-                  }
-              ],
-              "source": {
-                  "offer": "sql2022-ws2022",
-                  "publisher": "microsoftsqlserver",
-                  "sku": "web-gen2",
-                  "type": "PlatformImage",
-                  "version": "latest"
-              },
-              "vmProfile": {
-                  "osDiskSizeGB": 127,
-                  "vmSize": "Standard_D8as_v5"
-              }
-          }
-      }
-  ]
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "imageName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "imagePublisher": {
+            "type": "string"
+        },
+        "imageOffer": {
+            "type": "string"
+        },
+        "imageSku": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        },
+        "vmSize": {
+            "type": "string"
+        },
+        "osDiskSizeGB": {
+            "type": "int"
+        },
+        "userAssignedIdentities": {
+            "type": "array"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.VirtualMachineImages/imageTemplates",
+            "apiVersion": "2022-07-01",
+            "dependsOn": [],
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "vmProfile": {
+                    "vmSize": "[parameters('vmSize')]",
+                    "osDiskSizeGB": "[parameters('osDiskSizeGB')]",
+                    "userAssignedIdentities": "[parameters('userAssignedIdentities')]"
+                },
+                "source": {
+                    "type": "PlatformImage",
+                    "publisher": "[parameters('imagePublisher')]",
+                    "offer": "[parameters('imageOffer')]",
+                    "sku": "[parameters('imageSku')]",
+                    "version": "[parameters('version')]"
+                },
+                "distribute": [
+                    {
+                        "type": "SharedImage",
+                        "galleryImageId": "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AzureImageBuilder01/providers/Microsoft.Compute/galleries/AzureImageComputeGallery01/images/Standar_Launch_AIG/versions/2.0.0",
+                        "replicationRegions": [
+                            "northeurope"
+                        ],
+                        "excludeFromLatest": false,
+                        "runOutputName": "runOutputImageVersion"
+                    }
+                ],
+                "customize": [
+                    {
+                        "type": "PowerShell",
+                        "name": "powershellscriptscript0",
+                        "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script1.ps1",
+                        "runElevated": true,
+                        "runAsSystem": true,
+                        "sha256Checksum": "29554a7e29ab2a4b8f5c5cc655c0bfc9599dabf98eb0649a2f7546b61fdfd0b6"
+                    },
+                    {
+                        "type": "PowerShell",
+                        "name": "powershellscriptscript1",
+                        "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script2.ps1",
+                        "runElevated": true,
+                        "runAsSystem": true,
+                        "sha256Checksum": "8A6A5B62559288CFB50C3FF317701BE1A7936515CB151BACF5A4AC8393C8DB9A"
+                    },
+                    {
+                        "type": "PowerShell",
+                        "name": "powershellscriptscript2",
+                        "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script3.ps1",
+                        "runElevated": true,
+                        "runAsSystem": true,
+                        "sha256Checksum": "6260a9effcf4c09ca7bfe43899007c234fba22f8e77e78c8f883f7519ea5c6f5"
+                    }
+                ]
+            },
+            "tags": {},
+            "identity": {
+                "type": "UserAssigned",
+                "userAssignedIdentities": {
+                    "/subscriptions/a06870f7-b3e2-4d67-af38-e6d02679064e/resourceGroups/AzureImageBuilder01/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AzureImageBuilderIdentity": {}
+                }
+            }
+        }
+    ],
+    "outputs": {}
 }
