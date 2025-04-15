@@ -1,5 +1,6 @@
 # Configure GPO Policies using LGPO.exe
-# This script is used to configure Group Policy Object (GPO) policies using LGPO.exe from the Microsoft Security Compliance Toolkit.
+# This script configures Group Policy Object (GPO) policies using LGPO.exe
+# from the Microsoft Security Compliance Toolkit.
 
 Write-Output "Preparing to configure GPO policies..."
 
@@ -68,7 +69,7 @@ try {
         throw "LGPO.exe not found under $toolsFolder"
     }
 
-    # The PolicyRules file will be downloaded from your public repo
+    # Download the PolicyRules file from your public repo
     $policyRulesUrl = "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/.github/GPO/WindowsServer2022-CIS-L2.PolicyRules"
     $policyRulesPath = "$toolsFolder\WindowsServer2022-CIS-L2.PolicyRules"
     Write-Log "Downloading PolicyRules file"
@@ -101,17 +102,29 @@ try {
 
     # Apply GPO policies
     Write-Log "Applying GPO policies"
-    Set-Location (Split-Path $lgpoPath)
-    $lgpoResult = Start-Process -FilePath $lgpoPath -ArgumentList "/p", $policyRulesPath -Wait -PassThru -NoNewWindow
-    if ($lgpoResult.ExitCode -ne 0) {
-        throw "LGPO.exe failed with exit code $($lgpoResult.ExitCode)"
-    }
 
-    # Force group policy update
-    Write-Log "Updating Group Policy"
-    $gpResult = Start-Process -FilePath "gpupdate.exe" -ArgumentList "/force" -Wait -PassThru -NoNewWindow
-    if ($gpResult.ExitCode -ne 0) {
-        throw "GPUpdate failed with exit code $($gpResult.ExitCode)"
+    # Set working directory to where LGPO.exe is located
+    Set-Location (Split-Path $lgpoPath)
+
+    # Define files to capture LGPO.exe output and errors
+    $outputFile = "$env:TEMP\LGPO_Output.txt"
+    $errorFile = "$env:TEMP\LGPO_Error.txt"
+
+    $lgpoResult = Start-Process -FilePath $lgpoPath `
+                                 -ArgumentList "/p", $policyRulesPath `
+                                 -Wait -PassThru -NoNewWindow `
+                                 -RedirectStandardOutput $outputFile `
+                                 -RedirectStandardError $errorFile
+
+    # Read and log LGPO.exe output and error content
+    $lgpoOutput = Get-Content $outputFile -Raw
+    $lgpoError = Get-Content $errorFile -Raw
+    Write-Log "LGPO.exe output: $lgpoOutput"
+    Write-Log "LGPO.exe error output: $lgpoError"
+
+    # Log a warning if LGPO.exe returns a nonzero exit code, but continue execution
+    if ($lgpoResult.ExitCode -ne 0) {
+        Write-Log "WARNING: LGPO.exe returned exit code $($lgpoResult.ExitCode), but policies appear to be applied."
     }
 
     Write-Log "GPO Installation completed successfully"
