@@ -39,8 +39,8 @@
                       "name": "powershellscriptscript1",
                       "runAsSystem": true,
                       "runElevated": true,
-                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/Azure%20Template%20Script/Script2.ps1",
-                      "sha256Checksum": "cf03aed4e798087debd24d0c08e0b3cf050fa7359b7c0672823f0c365b65a99c",
+                      "scriptUri": "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/Azure%20Template%20Script/Script2.ps1",
+                      "sha256Checksum": "8A6A5B62559288CFB50C3FF317701BE1A7936515CB151BACF5A4AC8393C8DB9A",
                       "type": "PowerShell"
                   },
                   {
