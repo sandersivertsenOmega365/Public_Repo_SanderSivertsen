@@ -1,3 +1,5 @@
+# This script is used to configure the Windows registry settings for TLS 1.2 and other security protocols.
+# It creates a registry file with the necessary settings and imports it into the system registry.
 $regFile = @"
 Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server]

@@ -1,7 +1,7 @@
-# ---------------------
 # 1. Install Chocolatey and Tools
-# ---------------------
-Write-Output "Installing Chocolatey and tools (Notepad++, 7-Zip, TeamViewer)..."
+# This script installs Chocolatey and some common tools (Notepad++, 7-Zip) using Chocolatey.
+# It also sets the execution policy to Bypass for the current process and ensures TLS 1.2 is used for secure downloads.
+Write-Output "Installing Chocolatey and tools (Notepad++, 7-Zip)..."
 
 Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12

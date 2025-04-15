@@ -1,6 +1,6 @@
-# ---------------------
 # Configure GPO Policies using LGPO.exe
-# ---------------------
+# This script is used to configure Group Policy Object (GPO) policies using LGPO.exe from the Microsoft Security Compliance Toolkit.
+
 Write-Output "Preparing to configure GPO policies..."
 
 # Set error action preference to stop on all errors
@@ -69,7 +69,7 @@ try {
     }
 
     # The PolicyRules file will be downloaded from your public repo
-    $policyRulesUrl = "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/.github/GPO/WindowsServer2022-CIS-L2.PolicyRules"
+    $policyRulesUrl = "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/.github/GPO/WindowsServer2022-CIS-L2.PolicyRules"
     $policyRulesPath = "$toolsFolder\WindowsServer2022-CIS-L2.PolicyRules"
     Write-Log "Downloading PolicyRules file"
 
