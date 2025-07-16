@@ -70,7 +70,7 @@ try {
     }
 
     # Download the PolicyRules file from your public repo
-    $policyRulesUrl = "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/refs/heads/main/.github/GPO/WindowsServer2022-CIS-L2.PolicyRules"
+    $policyRulesUrl = "https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/GPO/WindowsServer2022-CIS-L2.PolicyRules"
     $policyRulesPath = "$toolsFolder\WindowsServer2022-CIS-L2.PolicyRules"
     Write-Log "Downloading PolicyRules file"
 
