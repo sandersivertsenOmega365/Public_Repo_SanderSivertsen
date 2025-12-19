@@ -10,9 +10,9 @@ This simple tool converts any PDF into JPEG images. It’s designed for non-tech
 ## Quick Start (Easiest)
 1. Click the green **Code** button on this page and choose **Download ZIP**.
 2. Save the ZIP and **Extract** it (right-click → Extract All…).
-3. Open the extracted folder and **double‑click** `Run-Me.bat`.
-4. When asked, **choose the PDF** you want to convert.
-5. Wait a bit — a folder named `jpg` will open with your pictures.
+3. Open the extracted folder and **double‑click** `Run-UI.bat` (simple app opens).
+4. Click **Browse** to choose your PDF, then **Choose folder** for where to save.
+5. Click **Convert to pictures** — a folder named `jpg` opens with your images.
 
 > Note: The first run may install free tools automatically (ImageMagick + Ghostscript) using **winget**. If Windows asks for permission, click **Yes**.
 
@@ -36,6 +36,15 @@ Follow these steps once, then you can use it any time:
 
 ## If `Run-Me.bat` Doesn’t Work
 You can also run the PowerShell script directly:
+## Use the Simple App (GUI)
+Prefer an app window? Use `Run-UI.bat`. It shows:
+- Row 1: **PDF file** (Browse to select your PDF)
+- Row 2: **Save to** (Choose the folder you want)
+- Optional: DPI and Quality
+- Button: **Convert to pictures**
+
+All installs happen automatically on first run (ImageMagick + Ghostscript). If the installer appears, click **Next → Install**.
+
 
 - Right‑click `Convert-PdfToJpeg.ps1` → **Run with PowerShell**
 - Or open Start → type **PowerShell** → open it, then run:
@@ -86,6 +95,16 @@ winget install --id ArtifexSoftware.Ghostscript -e --accept-package-agreements -
 # If that fails, try the alternate ID:
 winget install --id Ghostscript.Ghostscript -e --accept-package-agreements --accept-source-agreements
 ```
+
+If winget still doesn’t find it, you can download the installer directly:
+
+- Ghostscript releases: https://github.com/ArtifexSoftware/ghostpdl-downloads/releases
+- Download the latest `w64.exe` file (for 64‑bit Windows), then double‑click and install.
+
+On some PCs, the script will automatically fetch the latest installer and start it — if you see a setup window, just click **Next → Install**.
+
+### Important: Re-download after updates
+If you tested earlier and got an installation error, please **download the ZIP again** to get the latest fixes, then repeat the steps above.
 
 ## Privacy
 Everything runs locally on your PC. Your PDF never leaves your computer.
