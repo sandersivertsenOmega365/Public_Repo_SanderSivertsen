@@ -76,6 +76,16 @@ powershell -ExecutionPolicy Bypass -File .\Convert-PdfToJpeg.ps1 \
 - **Slow on first run**: It may be installing ImageMagick/Ghostscript — that’s normal.
 - **SmartScreen warning**: Click **More info** → **Run anyway** (this is expected for small helper tools).
 - **Admin approval prompt**: Click **Yes**. The installer needs it only to add the free tools.
+ - **Window closes too fast / can’t read error**: Open the `last-run.log` file next to `Run-Me.bat` to see details.
+ - **Using PowerShell 7 (`pwsh`)**: Prefer Windows PowerShell (`powershell.exe`) — the tool auto-restarts in STA mode to show the file picker.
+ - **Ghostscript not found / install fails**: Try refreshing winget sources, then install manually:
+
+```powershell
+winget source update
+winget install --id ArtifexSoftware.Ghostscript -e --accept-package-agreements --accept-source-agreements
+# If that fails, try the alternate ID:
+winget install --id Ghostscript.Ghostscript -e --accept-package-agreements --accept-source-agreements
+```
 
 ## Privacy
 Everything runs locally on your PC. Your PDF never leaves your computer.

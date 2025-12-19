@@ -15,6 +15,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+if ([System.Threading.Thread]::CurrentThread.ApartmentState -ne 'STA') {
+    Write-Host "Starter pa nytt i STA-modus for filvalg-dialog..." -ForegroundColor Cyan
+    $argsList = "-NoProfile -ExecutionPolicy Bypass -STA -File `"$PSCommandPath`""
+    Start-Process -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -ArgumentList $argsList -Wait
+    exit
+}
+
 function Write-Step([string]$text) {
     Write-Host $text -ForegroundColor Cyan
 }
@@ -22,6 +29,15 @@ function Write-Step([string]$text) {
 function Ensure-Winget {
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
         throw "Winget mangler. Installer winget (kjor Install-Winget.ps1 eller hent fra Microsoft Store) og prov igjen."
+    }
+}
+
+function Update-WingetSources {
+    try {
+        Write-Step "Oppdaterer winget-kilder..."
+        $proc = Start-Process -FilePath "winget" -ArgumentList @("source","update") -Wait -PassThru -NoNewWindow
+    } catch {
+        Write-Host "Klarte ikke a oppdatere winget-kilder, prover videre..." -ForegroundColor Yellow
     }
 }
 
@@ -47,6 +63,31 @@ function Install-PackageIfMissing {
     }
 }
 
+function Install-GhostscriptIfMissing {
+    if (Get-Command gswin64c -ErrorAction SilentlyContinue) { return }
+
+    Write-Step "Installerer Ghostscript (kan ta litt tid, trenger nett og winget)..."
+    $candidateIds = @(
+        "ArtifexSoftware.Ghostscript",
+        "Ghostscript.Ghostscript"
+    )
+    foreach ($id in $candidateIds) {
+        try {
+            $arguments = @(
+                "install", "-e", "--id", $id,
+                "--accept-package-agreements", "--accept-source-agreements", "--silent"
+            )
+            $process = Start-Process -FilePath "winget" -ArgumentList $arguments -Wait -PassThru -NoNewWindow
+            if ($process.ExitCode -eq 0 -and (Get-Command gswin64c -ErrorAction SilentlyContinue)) {
+                return
+            }
+        } catch {
+            # try next id
+        }
+    }
+    throw "Klarte ikke a installere Ghostscript via winget. Prov a oppdatere winget-kilder og installer manuelt (se README)."
+}
+
 function Pick-Pdf {
     Add-Type -AssemblyName System.Windows.Forms
     $dialog = New-Object System.Windows.Forms.OpenFileDialog
@@ -63,8 +104,9 @@ function Pick-Pdf {
 try {
     Write-Step "Sjekker forutsetninger..."
     Ensure-Winget
+    Update-WingetSources
     Install-PackageIfMissing -CommandName "magick" -PackageId "ImageMagick.ImageMagick" -FriendlyName "ImageMagick"
-    Install-PackageIfMissing -CommandName "gswin64c" -PackageId "ArtifexSoftware.GhostScript" -FriendlyName "Ghostscript"
+    Install-GhostscriptIfMissing
 } catch {
     Write-Host $_ -ForegroundColor Red
     Write-Host "Avbryter. Fiks feilen over og prov igjen." -ForegroundColor Red
