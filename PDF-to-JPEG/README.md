@@ -16,6 +16,24 @@ This simple tool converts any PDF into JPEG images. It’s designed for non-tech
 
 > Note: The first run may install free tools automatically (ImageMagick + Ghostscript) using **winget**. If Windows asks for permission, click **Yes**.
 
+## Install On Your PC (Step‑by‑Step)
+Follow these steps once, then you can use it any time:
+
+1. Open this page and click **Code → Download ZIP**.
+2. In your Downloads, **right‑click** the ZIP → **Extract All…** → choose a location like **Documents** or **Desktop**.
+3. Open the extracted folder. If Windows shows a blue warning (SmartScreen): click **More info** → **Run anyway**.
+4. **Double‑click** `Run-Me.bat`. If Windows asks for permission or admin approval, click **Yes**.
+5. On first run, it may install free tools (ImageMagick + Ghostscript) using **winget**. This is safe and only happens once.
+6. When prompted, **pick your PDF**. The pictures will appear in a new `jpg` folder.
+
+### Keep It Handy (Desktop Shortcut)
+- Right‑click `Run-Me.bat` → **Show more options** → **Send to** → **Desktop (create shortcut)**.
+- On your Desktop, you can rename the shortcut to “PDF to JPEG”. Double‑click it any time you need it.
+
+### If Winget Is Missing
+- Install Microsoft **App Installer** from the **Microsoft Store** (search “App Installer”).
+- After install, run `Run-Me.bat` again.
+
 ## If `Run-Me.bat` Doesn’t Work
 You can also run the PowerShell script directly:
 
@@ -56,6 +74,8 @@ powershell -ExecutionPolicy Bypass -File .\Convert-PdfToJpeg.ps1 \
 - **Execution policy blocked**: Use the command with `-ExecutionPolicy Bypass` (shown above).
 - **No PDF chosen**: Run again and select a file when prompted.
 - **Slow on first run**: It may be installing ImageMagick/Ghostscript — that’s normal.
+- **SmartScreen warning**: Click **More info** → **Run anyway** (this is expected for small helper tools).
+- **Admin approval prompt**: Click **Yes**. The installer needs it only to add the free tools.
 
 ## Privacy
 Everything runs locally on your PC. Your PDF never leaves your computer.
