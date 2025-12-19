@@ -103,6 +103,14 @@ If winget still doesn’t find it, you can download the installer directly:
 
 On some PCs, the script will automatically fetch the latest installer and start it — if you see a setup window, just click **Next → Install**.
 
+### One‑Click Download
+Prefer a single download? Get the ready‑to‑use ZIP:
+
+https://raw.githubusercontent.com/sandersivertsenOmega365/Public_Repo_SanderSivertsen/main/PDF-to-JPEG/releases/PDF-to-JPEG-v1.0.zip
+
+- Save the ZIP and **Extract All…**
+- Open the folder and double‑click `Run-UI.bat`
+
 ### Important: Re-download after updates
 If you tested earlier and got an installation error, please **download the ZIP again** to get the latest fixes, then repeat the steps above.
 
